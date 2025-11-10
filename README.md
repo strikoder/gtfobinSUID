@@ -1,5 +1,5 @@
 ![gtfobinsuid banner](https://raw.githubusercontent.com/strikoder/gtfobinSUID/main/banner.png)
-# gtfobinSUID
+# gtfobinSUID V1.1
 
 **Developed by [strikoder](https://www.youtube.com/@strikoder)**  
 
@@ -13,16 +13,22 @@ In offline mode, it uses a local database file (db.txt), which can be automatica
 ---
 
 ## 🔹 Features
-- Checks if a binary exists on GTFOBins under **SUID** or **Limited SUID**
-- **Online mode**: fetches live data directly from GTFOBins
-- **Offline mode**: uses a local `db.txt` for environments without internet
-- **Auto-detect** mode: automatically switches to offline when no network
-- **Database updater**: `--update-db` automatically pulls all GTFOBins SUID and Limited SUID entries
-- **Real-time output**: prints `[FOUND]`, `[FOUND - Limited SUID]`, or `[NOT FOUND]` as it processes
-- Minimal, no dependencies beyond `requests` *(likely preinstalled on Kali Linux)*
-- [WIP] Add pkexec with CVE detection
-- [WIP] Handle binaries with version suffixes (e.g., python3)
+
 - Works on Linux, macOS, and Windows
+- Handles versioned binary names (python3, perl5.42, etc.)
+- Prints the command to enumerate SUID/GUID on Linux systems on demand
+- Minimal, no dependencies beyond `requests` *(likely preinstalled on Kali Linux)*
+- Shows hints for binaries that might have vulnearbilites when they have SUID enabled like pkexec and sudo 
+- Checks if a binary exists on GTFOBins under **SUID** or **Limited SUID** and prints `[FOUND]`, `[FOUND - Limited SUID]`, or `[NOT FOUND]` as it processes
+
+---
+
+## Flags
+
+- **--online (Default)**: fetches live data directly from GTFOBins
+- **--update-db**: automatically pulls all GTFOBins SUID and Limited SUID entries
+- **--offline (Auto-Switch with no network)**: uses a local `db.txt` for environments without internet
+
 ---
 
 ## Installation
@@ -61,7 +67,8 @@ Press **Ctrl+d** (Linux/macOS) or **Ctrl+z + Enter** (Windows) to finish.
 You’ll see immediate output:
 ```
 [FOUND] find -> https://gtfobins.github.io/gtfobins/find/
-[FOUND] sudo -> https://gtfobins.github.io/gtfobins/sudo/
+[NOT FOUND] sudo
+    [!] HINT: 'sudo' with SUID might indicate CVE exploits or misconfigurations (check Baron Samedit & version vulnerabilities)
 [NOT FOUND] mount
 ```
 ### 2. Force online or offline
