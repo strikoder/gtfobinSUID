@@ -8,7 +8,7 @@ In offline mode, it uses a local database file (db.txt), which can be automatica
 
 ## 🎥 Demo
 
-![gtfobinSUID demo](https://raw.githubusercontent.com/strikoder/gtfobinSUID/main/demo.gif)
+![gtfobinSUID demo](https://github.com/strikoder/gtfobinSUID/blob/main/demoV1.1.gif)
 
 ---
 
