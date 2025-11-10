@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gtfobinSUID
+gtfobinSUID V1.1
 -----------
 
 Developed by: Strikoder
@@ -45,6 +45,25 @@ def extract_basenames(text: str):
         seen.add(name)
         names.append(name)
     return names
+
+def normalize_binary(name: str) -> str:
+    """Normalize binary names like python2.7, python3, php7.4 to base names."""
+    name_lower = name.lower()
+    
+    # Python variants
+    if name_lower.startswith('python'):
+        return 'python'
+    # Perl variants
+    if name_lower.startswith('perl'):
+        return 'perl'
+    # PHP variants
+    if name_lower.startswith('php'):
+        return 'php'
+    # Node variants
+    if name_lower.startswith('node'):
+        return 'node'
+    
+    return name
 
 def check_gtfobin_online(name: str, timeout=3):
     """Check one binary on GTFOBins."""
@@ -141,10 +160,22 @@ def print_banner ():
 ░███ ░███  ░███ ███  ░███     ░███ ░███ ░███ ░███ ░███  ░███ ░███  ███    ░███ ░███   ░███  ░███  ░███    ███
 ░░███████  ░░█████   █████    ░░██████  ████████  █████ ████ █████░░█████████  ░░████████   █████ ██████████
  ░░░░░███   ░░░░░   ░░░░░      ░░░░░░  ░░░░░░░░  ░░░░░ ░░░░ ░░░░░  ░░░░░░░░░    ░░░░░░░░   ░░░░░ ░░░░░░░░░░
- ███ ░███
+ ███ ░███                                                                                           v1.1
 ░░██████
  ░░░░░░
 """)
+
+def print_hint(name: str):
+    """Print special hints for certain binaries."""
+    hints = {
+        'sudo': "[!] HINT: 'sudo' with SUID might indicate CVE exploits or misconfigurations (check Baron Samedit & version vulnerabilities)",
+        'pkexec': "[!] HINT: 'pkexec' with SUID might indicate CVE exploits (e.g., PwnKit CVE-2021-4034) - not typically a GTFOBins vector",
+        'ssh-agent': "[!] HINT: 'ssh-agent' might be a false positive - usually not exploitable via SUID",
+    }
+    
+    name_lower = name.lower()
+    if name_lower in hints:
+        print(f"    {hints[name_lower]}")
 
 def main():
     parser = argparse.ArgumentParser(description="Check binaries against GTFOBins for SUID / Limited SUID.")
@@ -163,6 +194,14 @@ def main():
     if args.update_db:
         update_db(args.db)
         return
+
+    sys.stdout.write("\nDo you want to see the SUID/SGID enumeration commands? (y/n): ")
+    sys.stdout.flush()
+    response = input().strip().lower()
+
+    if response in ['y', 'yes']:
+        print("\n[*] SUID/SGID Enumeration Commands:")
+        print("find / -perm -u=s -type f 2>/dev/null; find / -perm -g=s -type f 2>/dev/null")
 
     text = read_input()
     if not text.strip():
@@ -192,28 +231,37 @@ def main():
     print(f"\n[MODE] Running in {mode.upper()} mode\n")
 
     for name in names:
+        normalized = normalize_binary(name)
+        
         if mode == "online":
-            result = check_gtfobin_online(name)
+            result = check_gtfobin_online(normalized)
             if not result:
                 print(f"[NOT FOUND] {name}")
+                print_hint(name)
                 continue
             has_suid, has_limited, url = result
             if has_suid:
                 print(f"[FOUND] {name} -> {url}")
+                print_hint(name)
             elif has_limited:
                 print(f"[FOUND - Limited SUID] {name} -> {url}")
+                print_hint(name)
             else:
                 print(f"[NOT FOUND] {name}")
+                print_hint(name)
 
         else:
-            lname = name.lower()
-            url = f"https://gtfobins.github.io/gtfobins/{lname}/"
-            if lname in suid_db:
+            lnorm = normalized.lower()
+            url = f"https://gtfobins.github.io/gtfobins/{lnorm}/"
+            if lnorm in suid_db:
                 print(f"[FOUND] {name} -> {url} ")
-            elif lname in limited_db:
+                print_hint(name)
+            elif lnorm in limited_db:
                 print(f"[FOUND - Limited SUID] {name} -> {url} ")
+                print_hint(name)
             else:
                 print(f"[NOT FOUND] {name}")
+                print_hint(name)
 
 
 
