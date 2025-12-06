@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gtfobinSUID V1.1
+gtfobinSUID V1.2
 -----------
 
 Developed by: Strikoder
@@ -171,6 +171,7 @@ def print_hint(name: str):
         'sudo': "[!] HINT: 'sudo' with SUID might indicate CVE exploits or misconfigurations (check Baron Samedit & version vulnerabilities)",
         'pkexec': "[!] HINT: 'pkexec' with SUID might indicate CVE exploits (e.g., PwnKit CVE-2021-4034) - not typically a GTFOBins vector",
         'ssh-agent': "[!] HINT: 'ssh-agent' might be a false positive - usually not exploitable via SUID",
+        'ndsudo': "[!] HINT: 'ndsudo' is vulnerable to CVE-2024-32019 - exploit available at https://github.com/AzureADTrent/CVE-2024-32019-POC (can be compiled on attacker machine then moved to target)",
     }
     
     name_lower = name.lower()
