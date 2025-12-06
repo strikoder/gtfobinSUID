@@ -1,5 +1,5 @@
 ![gtfobinsuid banner](https://raw.githubusercontent.com/strikoder/gtfobinSUID/main/banner.png)
-# gtfobinSUID V1.1
+# gtfobinSUID V1.2
 
 **Developed by [strikoder](https://www.youtube.com/@strikoder)**  
 
