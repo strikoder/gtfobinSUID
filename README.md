@@ -1,4 +1,5 @@
-![gtfobinsuid banner](https://raw.githubusercontent.com/strikoder/gtfobinSUID/main/banner.png)
+<img width="1536" height="1024" alt="banner" src="https://github.com/user-attachments/assets/8ed1c8a1-9880-4828-9732-85302f06397e" />
+
 # gtfobinSUID V1.2
 
 **Developed by [strikoder](https://www.youtube.com/@strikoder)**  
@@ -8,7 +9,7 @@ In offline mode, it uses a local database file (db.txt), which can be automatica
 
 ## 🎥 Demo
 
-![gtfobinSUID demo](https://github.com/strikoder/gtfobinSUID/blob/main/demoV1.1.gif)
+![gtfobinSUID demo](https://github.com/user-attachments/assets/f96be760-cfad-4845-9f06-82bb0bafbcb1)
 
 ---
 
