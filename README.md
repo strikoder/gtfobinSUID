@@ -35,6 +35,11 @@ In offline mode, it uses a local database file (db.txt), which can be automatica
 ## Installation
 
 Use one of these installation methods:
+
+```bash
+pip install gtfobinsuid
+```
+
 ```bash
 git clone https://github.com/strikoder/gtfobinSUID.git
 cd gtfobinsuid

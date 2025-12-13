@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gtfobinsuid"
+version = "1.2.0"
+description = "A Python tool for automating SUID/SGID binary enumeration against GTFOBins"
+readme = "README.md"
+authors = [
+    {name = "strikoder", email = "strikoder@gmail.com"}
+]
+license = {text = "GPL-3.0"}
+requires-python = ">=3.6"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Topic :: Security",
+    "Topic :: System :: Systems Administration",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+]
+keywords = ["suid", "gtfobins", "security", "penetration-testing", "privilege-escalation", "enumeration", "pentest"]
+dependencies = [
+    "requests>=2.25.0",
+    "beautifulsoup4>=4.9.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/strikoder/gtfobinSUID"
+"Bug Tracker" = "https://github.com/strikoder/gtfobinSUID/issues"
+Repository = "https://github.com/strikoder/gtfobinSUID"
+Documentation = "https://github.com/strikoder/gtfobinSUID#readme"
+
+[project.scripts]
+gtfobinsuid = "gtfobinsuid:main"
+
+[tool.setuptools]
+py-modules = ["gtfobinsuid"]
