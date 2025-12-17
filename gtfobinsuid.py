@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gtfobinSUID V1.2
+gtfobinSUID V1.3.0
 -----------
 
 Developed by: Strikoder
@@ -38,13 +38,22 @@ def extract_basenames(text: str):
     paths = re.findall(r'(/(?:[A-Za-z0-9_\-./]+))', text)
     names = []
     seen = set()
+    nonstandard_full_paths = set()
+    
     for p in paths:
+        # Track full paths that are in non-standard directories first
+        dir_path = os.path.dirname(p)
+        if dir_path and not dir_path.startswith(('/bin', '/sbin', '/usr/bin', '/usr/sbin')):
+            nonstandard_full_paths.add(p)
+        
+        # Then extract unique basenames for GTFOBins checking
         name = os.path.basename(p)
         if not name or name in seen:
             continue
         seen.add(name)
         names.append(name)
-    return names
+    
+    return names, nonstandard_full_paths
 
 def normalize_binary(name: str) -> str:
     """Normalize binary names like python2.7, python3, php7.4 to base names."""
@@ -160,7 +169,7 @@ def print_banner ():
 ░███ ░███  ░███ ███  ░███     ░███ ░███ ░███ ░███ ░███  ░███ ░███  ███    ░███ ░███   ░███  ░███  ░███    ███
 ░░███████  ░░█████   █████    ░░██████  ████████  █████ ████ █████░░█████████  ░░████████   █████ ██████████
  ░░░░░███   ░░░░░   ░░░░░      ░░░░░░  ░░░░░░░░  ░░░░░ ░░░░ ░░░░░  ░░░░░░░░░    ░░░░░░░░   ░░░░░ ░░░░░░░░░░
- ███ ░███                                                                                           v1.2
+ ███ ░███                                                                                           v1.3.0
 ░░██████
  ░░░░░░
 """)
@@ -172,12 +181,26 @@ def print_hint(name: str):
         'pkexec': "[!] HINT: 'pkexec' with SUID might indicate CVE exploits (e.g., PwnKit CVE-2021-4034) - not typically a GTFOBins vector",
         'ssh-agent': "[!] HINT: 'ssh-agent' might be a false positive - usually not exploitable via SUID",
         'ndsudo': "[!] HINT: 'ndsudo' is vulnerable to CVE-2024-32019 - exploit available at https://github.com/AzureADTrent/CVE-2024-32019-POC (can be compiled on attacker machine then moved to target)",
+        'doas': "[!] HINT: 'doas' is similar to sudo and allows privilege escalation. Check the configuration file (commonly at /etc/doas.conf or /usr/local/etc/doas.conf) to see which commands can be run with elevated privileges",
     }
     
     name_lower = name.lower()
     if name_lower in hints:
         print(f"    {hints[name_lower]}")
 
+def print_nonstandard_paths_warning(paths: set):
+    """Print a warning about binaries found in non-standard paths."""
+    if not paths:
+        return
+    
+    print("\n================================================================================")
+    print("[!] WARNING: Binaries with SUID/SGID found in non-standard paths!")
+    print("================================================================================")
+    print("[!] The following binaries are in non-standard locations:")
+    for path in sorted(paths):
+        print(f"    - {path}")
+    print("\n[!] PRIVILEGE ESCALATION NOTE: These binaries deserve manual investigation.")
+    
 def main():
     parser = argparse.ArgumentParser(description="Check binaries against GTFOBins for SUID / Limited SUID.")
     parser.add_argument("--online", action="store_true", help="Query GTFOBins website directly for each binary (ignores local db).")
@@ -209,7 +232,7 @@ def main():
         print("No input provided.")
         return
 
-    names = extract_basenames(text)
+    names, nonstandard_paths = extract_basenames(text)
     if not names:
         print("No binaries found.")
         return
@@ -264,6 +287,8 @@ def main():
                 print(f"[NOT FOUND] {name}")
                 print_hint(name)
 
+    # Print warning about non-standard paths at the end
+    print_nonstandard_paths_warning(nonstandard_paths)
 
 
 if __name__ == "__main__":
