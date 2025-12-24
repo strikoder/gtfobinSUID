@@ -1,6 +1,6 @@
 <img width="1536" height="1024" alt="banner" src="https://github.com/user-attachments/assets/8ed1c8a1-9880-4828-9732-85302f06397e" />
 
-# gtfobinSUID V1.2
+# gtfobinSUID V1.3
 
 **Developed by [strikoder](https://www.youtube.com/@strikoder)**  
 
